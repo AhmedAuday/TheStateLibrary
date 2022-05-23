@@ -7,9 +7,9 @@ create database TheStateLibrary;
 
 CREATE TABLE Accounts(
     ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
-    usernamee varchar(50) NOT NULL unique ,
-    Passwordd varchar(20) NOT NULL ,
-    Rolee enum('Admin' , 'Employee' ,'Member') NOT NULL
+    AUsernames varchar(50) NOT NULL unique ,
+    APasswords varchar(20) NOT NULL ,
+    ARoles enum('Admin' , 'Employee' ,'Member') NOT NULL
 );
 
 CREATE TABLE Authors(
@@ -63,14 +63,15 @@ CREATE TABLE Customers(
 
 );
 
-CREATE TABLE BorrowedBooks(
+CREATE TABLE BorrowedBooksCustomer(
      ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+      EmployeeID INT NOT NULL ,
      CustomerID int  not null ,
      BookID int NOT NULL ,
      BorrowDate DATETIME NOT NULL,
      ReturnDate DATETIME ,
 
-     CONSTRAINT Booksss FOREIGN KEY (BookID)
+    CONSTRAINT Booksss FOREIGN KEY (BookID)
     REFERENCES Books(ID)
     on update cascade
     on delete cascade,
@@ -78,10 +79,45 @@ CREATE TABLE BorrowedBooks(
     CONSTRAINT BorrowedBookCustomer FOREIGN KEY (CustomerID)
     REFERENCES Customers(ID)
     on update cascade
+    on delete cascade,
+
+    CONSTRAINT Invoice FOREIGN KEY (EmployeeID)
+    REFERENCES Employees(ID)
+    on update cascade
     on delete cascade
 );
 
-CREATE TABLE Reports(
+
+# todo table for borrowed books for Members with Special discount
+CREATE TABLE BorrowedBooksMembers(
+     ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+     EmployeeID INT NOT NULL ,
+     MemberID int  not null ,
+     BookID int NOT NULL ,
+     BorrowDate DATETIME NOT NULL,
+     ReturnDate DATETIME ,
+
+    CONSTRAINT Booksss FOREIGN KEY (BookID)
+    REFERENCES Books(ID)
+    on update cascade
+    on delete cascade,
+
+    CONSTRAINT BorrowedBooksMembers FOREIGN KEY (MemberID)
+    REFERENCES Customers(ID)
+    on update cascade
+    on delete cascade,
+
+    CONSTRAINT Invoice FOREIGN KEY (EmployeeID)
+    REFERENCES Employees(ID)
+    on update cascade
+    on delete cascade
+);
+
+
+
+
+# todo fix it on everything
+CREATE TABLE CustomerBorrowReports(
     ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
     BorrowedBookID int UNIQUE not null ,
     IsDamage bool NOT NULL,
@@ -90,23 +126,58 @@ CREATE TABLE Reports(
     EstimatedDamageValue double(5,2) NOT NULL,
 
     CONSTRAINT DamageReport FOREIGN KEY (BorrowedBookID)
-    REFERENCES BorrowedBooks(ID)
+    REFERENCES BorrowedBooksCustomer(ID)
     on update cascade
     on delete cascade
-
 );
+
+
+# todo reports for members borrow books
+CREATE TABLE MembersBorrowReports(
+    ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+    BorrowedBooksMembersID int UNIQUE not null ,
+    IsDamage bool NOT NULL,
+    DamageDate date NOT NULL ,
+    Issues varchar(200) NOT NULL ,
+    EstimatedDamageValue double(5,2) NOT NULL,
+
+    CONSTRAINT DamageReport FOREIGN KEY (BorrowedBooksMembersID)
+    REFERENCES BorrowedBooksMembers(ID)
+    on update cascade
+    on delete cascade
+);
+
+
+
+CREATE TABLE MembersReports(
+    ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+    MemberID INT UNIQUE NOT NULL,
+    IsIssue bool NOT NULL,
+    Issue VARCHAR(250) NOT NULL,
+    Fine DEC(5,2) NOT NULL,
+    IssueDate DATETIME NOT NULL,
+
+    CONSTRAINT DamageReport FOREIGN KEY (MemberID)
+    REFERENCES Members(ID)
+    on update cascade
+    on delete cascade
+);
+
+
+
+
 
 CREATE TABLE Employees(
     ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
     Fname varchar(150) NOT NULL,
-     Mname varchar(150) NOT NULL,
-      Lname varchar(150) NOT NULL,
-      Gender enum('Male','Female') NOT NULL,
-      PhoneNumber bigint NOT NULL,
-      DateOfBirth date NOT NULL,
-      Postion enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
-      EuserAccountID int NOT NULL unique,
-      Salary dec(6,2) not null ,
+    Mname varchar(150) NOT NULL,
+    Lname varchar(150) NOT NULL,
+    Gender enum('Male','Female') NOT NULL,
+    PhoneNumber bigint NOT NULL,
+    DateOfBirth date NOT NULL,
+    Postion enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
+    EuserAccountID int NOT NULL unique,
+    Salary dec(6,2) not null ,
 
   CONSTRAINT EmployeeUserAccount FOREIGN KEY (EuserAccountID)
     REFERENCES Accounts(ID)
@@ -114,22 +185,24 @@ CREATE TABLE Employees(
     on delete cascade
 );
 
+
+ #todo add trigger for age
 CREATE TABLE Members (
     ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+    IDCard CHAR(20) UNIQUE NOT NULL,
     Fname varchar(150) NOT NULL,
-     Mname varchar(150) NOT NULL,
-     Lname varchar(150) NOT NULL,
-     Gender enum('Male','Female') NOT NULL,
-     PhoneNumber bigint NOT NULL,
-     Age int not null ,
-     DateOfBirth date NOT NULL,
-     Address varchar(250) NOT NULL ,
-     StudyLine enum ('None Student' , 'Bachelor' ,'Master' , 'PHD' ,'Student') NOT NULL,
-     MuserAccountID int NOT NULL unique,
-     MembershipTypeID int NOT NULL ,
-      MembershipStart DATETIME NOT NULL ,
+    Mname varchar(150) NOT NULL,
+    Lname varchar(150) NOT NULL,
+    Gender enum('Male','Female') NOT NULL,
+    PhoneNumber bigint NOT NULL,
+    Age int not null ,
+    DateOfBirth date NOT NULL,
+    Address varchar(250) NOT NULL ,
+    StudyLine enum ('None Student' , 'Bachelor' ,'Master' , 'PHD' ,'Student') NOT NULL,
+    MuserAccountID int NOT NULL unique,
+    MembershipTypeID int NOT NULL ,
+    MembershipStart DATETIME NOT NULL ,
     MembershipEnd DATETIME NOT NULL,
-     ReportID int unique ,
      CONSTRAINT CHKPersonAge CHECK (Age>=17),
 
     CONSTRAINT MemberUserAccount FOREIGN KEY (MuserAccountID)
@@ -139,11 +212,6 @@ CREATE TABLE Members (
 
     CONSTRAINT MembershipSubscription FOREIGN KEY (MembershipTypeID)
     REFERENCES MembershipTypes(ID)
-    on update cascade
-    on delete cascade,
-
-    CONSTRAINT MembersReports FOREIGN KEY (ReportID)
-    REFERENCES Reports(ID)
     on update cascade
     on delete cascade
 );
