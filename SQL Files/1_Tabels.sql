@@ -52,9 +52,9 @@ CREATE TABLE Books(
 
 
 CREATE TABLE Customers(
-    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
-    Fname varchar(150) NOT NULL,
-     Mname varchar(150) NOT NULL,
+      ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+      Fname varchar(150) NOT NULL,
+      Mname varchar(150) NOT NULL,
       Lname varchar(150) NOT NULL,
       Gender enum('Male','Female') NOT NULL,
       PhoneNumber bigint NOT NULL,
@@ -65,11 +65,12 @@ CREATE TABLE Customers(
 
 CREATE TABLE BorrowedBooksCustomer(
      ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
-      EmployeeID INT NOT NULL ,
+     EmployeeID INT NOT NULL ,
      CustomerID int  not null ,
      BookID int NOT NULL ,
      BorrowDate DATETIME NOT NULL,
      ReturnDate DATETIME ,
+     BorrowPrice DEC(5,2) NOT NULL ,
 
     CONSTRAINT Booksss FOREIGN KEY (BookID)
     REFERENCES Books(ID)
@@ -96,6 +97,7 @@ CREATE TABLE BorrowedBooksMembers(
      BookID int NOT NULL ,
      BorrowDate DATETIME NOT NULL,
      ReturnDate DATETIME ,
+     BorrowPrice DEC(5,2) NOT NULL ,
 
     CONSTRAINT Booksss FOREIGN KEY (BookID)
     REFERENCES Books(ID)
@@ -123,7 +125,7 @@ CREATE TABLE CustomerBorrowReports(
     IsDamage bool NOT NULL,
     DamageDate date NOT NULL ,
     Issues varchar(200) NOT NULL ,
-    EstimatedDamageValue double(5,2) NOT NULL,
+    EstimatedDamageValue dec(5,2) NOT NULL,
 
     CONSTRAINT DamageReport FOREIGN KEY (BorrowedBookID)
     REFERENCES BorrowedBooksCustomer(ID)
@@ -214,4 +216,15 @@ CREATE TABLE Members (
     REFERENCES MembershipTypes(ID)
     on update cascade
     on delete cascade
+);
+
+create table BooksDiscount(
+    ID int auto_increment primary key comment 'Primary Key',
+    bookID int not null unique ,
+    StartDate datetime,
+    EndDate datetime,
+   CONSTRAINT DiscountBook FOREIGN KEY (bookID)
+   references Books(ID)
+   on UPDATE CASCADE
+   on delete cascade
 );

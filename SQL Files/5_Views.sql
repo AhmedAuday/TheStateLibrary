@@ -28,7 +28,7 @@ create view CustomerBorrowedBooks AS
     select concat(C.Fname , ' ' , C.Mname , ' ' , C.Lname ) AS CustomerName ,
            C.Gender , C.PhoneNumber ,C.Addresses , C.DateOfBirth
             , BorrowDate , ReturnDate ,R.IsDamage, R.DamageDate , R.Issues ,
-            R.EstimatedDamageValue  ,BookPrice/2 as borrowPricee, ((BookPrice/2)+EstimatedDamageValue)as Total
+            R.EstimatedDamageValue  , BookPrice/2 as borrowPricee , ((BookPrice/2)+EstimatedDamageValue)as Total
 from BorrowedBooks
 inner join Customers C on BorrowedBooks.CustomerID = C.ID
 inner join Reports R on BorrowedBooks.ID = R.BorrowedBookID
