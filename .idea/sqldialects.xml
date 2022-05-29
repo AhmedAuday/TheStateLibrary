@@ -5,6 +5,7 @@
     <file url="file://$PROJECT_DIR$/SQL Files/4_Functions.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/5_Views.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/6_Procedure.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/SQL Files/7_Triggers.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/9_ProcedureCalls.sql" dialect="MySQL" />
   </component>
 </project>
