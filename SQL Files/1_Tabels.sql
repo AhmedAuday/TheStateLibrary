@@ -177,7 +177,7 @@ CREATE TABLE Employees(
     Gender enum('Male','Female') NOT NULL,
     PhoneNumber bigint NOT NULL,
     DateOfBirth date NOT NULL,
-    Postion enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
+    Position enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
     EuserAccountID int NOT NULL unique,
     Salary dec(6,2) not null ,
 
