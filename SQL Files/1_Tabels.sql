@@ -228,3 +228,22 @@ create table BooksDiscount(
    on UPDATE CASCADE
    on delete cascade
 );
+
+
+create TABLE BuyBooks (
+    ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
+    CustomerID INT NOT NULL,
+    BookID INT NOT NULL ,
+    BoughtDate DATETIME,
+
+    CONSTRAINT buyBook FOREIGN KEY (bookID)
+   references Books(ID)
+   on UPDATE CASCADE
+   on delete cascade,
+
+   CONSTRAINT custbuy FOREIGN KEY (CustomerID)
+   references Customers(ID)
+   on UPDATE CASCADE
+   on delete cascade
+
+);
