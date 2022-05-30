@@ -5,7 +5,7 @@ use TheStateLibrary;
 
 insert into Accounts (AUsernames, APasswords, ARoles)
 values
- ('ahmedauday99@localhost','A19285346' , 'Admin'),
+ ('ahmedauday99@localhost',password('A19285346'), 'Admin'),
  ('mohammedAli@localhost','Ahnedhhd' , 'Employee'),
  ('mahmmodMwfaq@localhost','D7689' , 'Employee'),
  ('ibrahimAfandi@localhost','F1990' , 'Employee'),

@@ -10,16 +10,16 @@ FROM Books
 INNER JOIN Authors ON Books.AuthorID=Authors.ID;
 
 
-# a view to show the damaged books //
+# a view to show the damaged from books //
 create view DamagedBooks AS
     select concat(C.Fname , ' ' , C.Mname , ' ' , C.Lname ) AS CustomerName
          , C.PhoneNumber ,C.Addresses , C.DateOfBirth ,c.Gender
             , BB.BorrowDate , BB.ReturnDate ,B.Title,B.ISBN ,R.IsDamage, R.DamageDate ,
               R.Issues , R.EstimatedDamageValue
-from BorrowedBooks as BB
+from BorrowedBooksCustomer as BB
 inner join Books B on BB.BookID = B.ID
 inner join Customers C on BB.CustomerID = C.ID
-inner join Reports R on BB.ID = R.BorrowedBookID
+inner join CustomerBorrowReports R on BB.ID = R.BorrowedBookID
 where R.IsDamage=1;
 
 
@@ -29,10 +29,10 @@ create view CustomerBorrowedBooks AS
            C.Gender , C.PhoneNumber ,C.Addresses , C.DateOfBirth
             , BorrowDate , ReturnDate ,R.IsDamage, R.DamageDate , R.Issues ,
             R.EstimatedDamageValue  , BookPrice/2 as borrowPricee , ((BookPrice/2)+EstimatedDamageValue)as Total
-from BorrowedBooks
-inner join Customers C on BorrowedBooks.CustomerID = C.ID
-inner join Reports R on BorrowedBooks.ID = R.BorrowedBookID
-inner join Books B on BorrowedBooks.BookID = B.ID;
+from BorrowedBooksCustomer as bbc
+inner join Customers C on bbc.CustomerID = C.ID
+inner join CustomerBorrowReports R on bbc.ID = R.BorrowedBookID
+inner join Books B on bbc.BookID = B.ID;
 
 
 # to show the none returned books
@@ -49,17 +49,18 @@ create VIEW  MembersData AS
            CONCAT(memberLevel(Price) , ' ',MT.Subscription,' ' ,MT.Price ) AS Subscriptions ,
            mm.MembershipStart, getMonths(mm.MembershipStart) AS MemberSince,
            if(mm.MembershipEnd = SYSDATE() ,'Expired' , 'Not Expired') As Status ,mm.MembershipEnd ,
-             MT.Price,A.usernamee
+             MT.Price,A.AUsernames , password(A.APasswords) As Password
 from Members As mm
 inner join MembershipTypes MT on mm.MembershipTypeID = MT.ID
 inner join Accounts A on mm.MuserAccountID = A.ID
-left outer join Reports AS r1r on mm.ReportID = r1r.ID;
+inner join MembersReports AS r1r on mm.ID = r1r.MemberID;
 
 
 # to view All employees with accounts
 create view Employeess As
-    select concat_ws(' ' ,fname, mname, lname) AS EmployeeName, A.usernamee ,A.Rolee,
-           gender, phonenumber, dateofbirth, postion , Salary
+    select concat_ws(' ' ,fname, mname, lname) AS EmployeeName, A.AUsernames ,A.ARoles,
+           PASSWORD(A.APasswords) As Password,
+           gender, phonenumber, dateofbirth, Position , Salary
     from Employees
 
 inner join Accounts A on Employees.EuserAccountID = A.ID
