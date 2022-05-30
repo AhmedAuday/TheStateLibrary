@@ -194,7 +194,7 @@ CREATE TABLE MembersBorrowReports(
     Issues varchar(200) NOT NULL ,
     EstimatedDamageValue double(5,2) NOT NULL,
 
-    CONSTRAINT DamageReportsd FOREIGN KEY (BorrowedBooksMembersID)
+    CONSTRAINT DamageReported FOREIGN KEY (BorrowedBooksMembersID)
     REFERENCES BorrowedBooksMembers(ID)
     on update cascade
     on delete cascade
