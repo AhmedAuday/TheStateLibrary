@@ -3,7 +3,7 @@
 use TheStateLibrary;
 
 
-insert into Accounts (usernamee, Passwordd, Rolee)
+insert into Accounts (AUsernames, APasswords, ARoles)
 values
  ('ahmedauday99@localhost','A19285346' , 'Admin'),
  ('mohammedAli@localhost','Ahnedhhd' , 'Employee'),
@@ -14,11 +14,11 @@ values
  ('mustafaHafad@localhost','V199nmS37' , 'Employee'),
  ('yousefHojazi@localhost','V1086Yh' , 'Employee'),
  ('mohammedMus22@localhost','Ftrbn56v' , 'Member'),
- ('hussenAli@localhost','C32897' , 'Member');
+ ('hussenAli@localhost','C32897' , 'Member'),
+ ('usama22@localhost','C332897' , 'Member');
 
-insert into Accounts (usernamee, Passwordd, Rolee) VALUES ('usama22@localhost','C332897' , 'Member');
 
-insert into Employees (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Postion, EuserAccountID ,Salary)
+insert into Employees (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth ,Position, EuserAccountID ,Salary)
 values
   ('Mohammed' , 'Ali' ,'Tariq' , 'Male' , 89990890908, '1990-12-01' , 'librarians' , 2 , 1500.0),
     ('Mahmood' , 'Mwafaq' ,'Fakhri' , 'Male' , 8999777708, '1990-03-04', 'Library Directors' , 3, 1500.0),
@@ -63,16 +63,16 @@ values
     ('Ali' ,'Ahmed' , 'Lenani' , 'Male' , 832798479 , '2002-05-10','Hewa A32');
 
 
-insert into  BorrowedBooks (CustomerID,BookID, BorrowDate, ReturnDate  )
+insert into  BorrowedBooksCustomer (CustomerID,EmployeeID,BookID, BorrowDate, ReturnDate , BorrowPrice )
 
 values
-    (1,1 ,'2022-04-10 12:45:56' , '2022-04-20 12:45:56' ),
-    (2,2  ,'2022-05-10 10:40:20' , '2022-05-15 12:45:56' ),
-    (3,6  ,'2022-05-15 2:40:20' , '2022-05-20 3:40:20'),
-    (4,5  ,'2022-05-20 11:40:20' , '2022-05-30 11:40:20');
+    (1,1,1 ,'2022-04-10 12:45:56' , '2022-04-20 12:45:56',30.00 ),
+    (2,2,2  ,'2022-05-10 10:40:20' , '2022-05-15 12:45:56' ,10.00),
+    (3,4,6  ,'2022-05-15 2:40:20' , '2022-05-20 3:40:20',05.00),
+    (4,5,5  ,'2022-05-20 11:40:20' , '2022-05-30 11:40:20',10.00);
 
 
-insert into Reports (BorrowedBookID ,IsDamage ,DamageDate, Issues, EstimatedDamageValue )
+insert into CustomerBorrowReports (BorrowedBookID ,IsDamage ,DamageDate, Issues, EstimatedDamageValue )
 values (1,1 , '2022-05-20' ,'Water damage' , 10),
        (2,1 , '2022-05-30' ,'Missing Page' , 20),
        (3,0 , '2022-05-30' ,'nothing' , 0),
@@ -86,10 +86,10 @@ values
     ('Monthly' , 50.00 );
 
 SET FOREIGN_KEY_CHECKS=0;
-insert into Members (Fname, Mname, Lname, Gender, PhoneNumber, Age, DateOfBirth, Address, StudyLine, MuserAccountID, MembershipTypeID ,ReportID , MembershipStart , MembershipEnd)
+insert into Members (IDCard,Fname, Mname, Lname, Gender, PhoneNumber, Age, DateOfBirth, Address, StudyLine, MuserAccountID, MembershipTypeID  , MembershipStart , MembershipEnd)
 VALUES
-    ('Hussen' , 'Ali', 'Alatbi','Male',71236783628 , 19 , '2000-05-10' , 'hewa' ,'Student', 10 , 1 ,null , '2022-05-01 12:45:56' , '2023-05-01 12:45:56'),
-    ('Mohammed' , 'Mustafa', 'Mohammed','Male',74746783628 , 21 , '2002-06-10' , 'Andazaran' ,'Student', 9 , 2 ,null , '2022-04-01 12:45:56' , '2022-10-01 12:45:56'),
-    ('Usama' , 'Sardar', 'Mohammed','Male',747645783628 , 20 , '2000-09-10' , 'baktiari' ,'Student', 11 , 3 , 1,  '2022-05-01 12:45:56' , '2022-06-01 12:45:56');
+    ('940517549a5e3da23830','Hussen' , 'Ali', 'Alatbi','Male',71236783628 , 19 , '2000-05-10' , 'hewa' ,'Student', 10 , 1  , '2022-05-01 12:45:56' , '2023-05-01 12:45:56'),
+    ('020b4249784e4fe2dc95','Mohammed' , 'Mustafa', 'Mohammed','Male',74746783628 , 21 , '2002-06-10' , 'Andazaran' ,'Student', 9 , 2  , '2022-04-01 12:45:56' , '2022-10-01 12:45:56'),
+    ('1a2ecaff9983aa71137b','Usama' , 'Sardar', 'Mohammed','Male',747645783628 , 20 , '2000-09-10' , 'baktiari' ,'Student', 11 , 3 ,'2022-05-01 12:45:56' , '2022-06-01 12:45:56');
 
 

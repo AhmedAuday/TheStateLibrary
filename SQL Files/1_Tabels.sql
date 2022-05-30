@@ -118,7 +118,7 @@ CREATE TABLE CustomerBorrowReports(
     CONSTRAINT DamageReport FOREIGN KEY (BorrowedBookID)
     REFERENCES BorrowedBooksCustomer(ID)
     on update cascade
-    on delete cascade
+    ON DELETE CASCADE
 );
 
 
