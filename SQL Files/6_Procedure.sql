@@ -125,14 +125,14 @@ BEGIN
 
     IF (availablebooks = bookIsbn) THEN
 
-        UPDATE BorrowedBooks t SET t.ReturnDate = date_add(now(), INTERVAL 5 minute) WHERE t.CustomerID = custID;
+        UPDATE BorrowedBooksCustomer t SET t.ReturnDate = date_add(now(), INTERVAL 5 minute) WHERE t.CustomerID = custID;
 
         if (isDamages = 1) then
-            set BoorowBOOksIDS = (select ID from BorrowedBooks t WHERE t.CustomerID = custID);
+            set BoorowBOOksIDS = (select ID from BorrowedBooksCustomer t WHERE t.CustomerID = custID);
 
             set Fee = (select (BookPrice / 3) + 2 from Books where ISBN = bookIsbn);
 
-            insert into Reports (IsDamage, DamageDate, Issues, EstimatedDamageValue, BorrowedBookID)
+            insert into CustomerBorrowReports (IsDamage, DamageDate, Issues, EstimatedDamageValue, BorrowedBookID)
             values (1, curdate(), issue, fee, BoorowBOOksIDS);
 
             SET s = 'book Returned successfully ';
@@ -155,7 +155,7 @@ begin
     DECLARE s varchar(50);
     update Employees
     set Salary = raiseSalary(Salary)
-    where Postion = postions;
+    where Position = postions;
     SET s = 'Successfully';
     select s;
 end $$$
@@ -178,6 +178,14 @@ begin
     DECLARE MembershipID int;
     DECLARE EndDate datetime;
     DECLARE s varchar(50);
+    DECLARE RandIDCrad CHAR(10) DEFAULT 0;
+
+    WHILE (RandIDCrad = 0)
+    do
+
+        SET RandIDCrad = (SELECT LEFT(UUID() , 20));
+
+    END WHILE;
 
     set `p_Name` = concat(fnames, lnames);
 
@@ -192,10 +200,10 @@ begin
     DEALLOCATE PREPARE `stmt`;
     FLUSH PRIVILEGES;
 
-    INSERT INTO Accounts (usernamee, Passwordd, Rolee)
+    INSERT INTO Accounts (AUsernames, APasswords, ARoles)
     VALUES (concat(`p_Name`, `_HOST`), `p_Passw`, 'Member');
 
-    set UserAccount = (select ID FROM Accounts WHERE usernamee = concat(`p_Name`, `_HOST`));
+    set UserAccount = (select ID FROM Accounts WHERE AUsernames = concat(`p_Name`, `_HOST`));
 
     if (subscriptionss = 'Monthly') then
         set MembershipID = (select ID from MembershipTypes where Subscription = 'Monthly');
@@ -211,10 +219,12 @@ begin
 
     end if;
 
-    insert into Members(fname, mname, lname, gender, phonenumber, age,
+
+
+    insert into Members(IDCard,fname, mname, lname, gender, phonenumber, age,
                         dateofbirth, address, studyline, museraccountid, membershiptypeid, MembershipStart,
                         MembershipEnd)
-    values (fnames, mnames, lnames, genders,
+    values (RandIDCrad,fnames, mnames, lnames, genders,
             phoneNumbers, Ages, Birthdate, Adreeses, study, UserAccount, MembershipID, date_add(sysdate() , INTERVAL 4 MINUTE ), EndDate);
 
     SET s = 'Member Registered Successfully';
