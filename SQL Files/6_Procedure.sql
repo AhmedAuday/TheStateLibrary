@@ -47,33 +47,55 @@ end $
 delimiter ;
 
 
-# to borrow a Book
+# to borrow a Book for customer
 DELIMITER $
-DROP procedure if exists BorrowBook$
-create procedure BorrowBook(
+DROP procedure if exists CustBorrowBook$
+create procedure CustBorrowBook(
     in fnames varchar(250), in mnames varchar(250),
     in lnames varchar(250), in genders varchar(20), in phonenumbers bigint, in dateofb date, in adrees varchar(250),
-    in BookName varchar(250), isbns char(10))
+    in BookName varchar(250), isbns char(10) )
 
 BEGIN
     DECLARE BookIDS int;
     DECLARE availableBooks varchar(250);
+    DECLARE AvalableCustomerFname VARCHAR(150);
+    DECLARE AvalableCustomerMname VARCHAR(150);
+    DECLARE AvalableCustomerLname VARCHAR(150);
     DECLARE CustID int;
     DECLARE s varchar(50);
+    DECLARE EmployeeIDs int;
+    DECLARE EmpUserName INT;
+    DECLARE CurrentUserName VARCHAR(250);
+    DECLARE BookPrices DEC(5,2);
+
+
 
     SET availableBooks = (select Title FROM Books where Title = BookName);
-
     set BookIDS = (select Books.ID from Books where Title = BookName AND ISBN = isbns);
+    SET AvalableCustomerFname =(SELECT Fname FROM Customers WHERE fnames = Fname);
+    SET AvalableCustomerMname =(SELECT Mname FROM Customers WHERE mnames = Mname);
+    SET AvalableCustomerLname =(SELECT Lname FROM Customers WHERE lnames = Lname);
 
     IF (availableBooks = BookName) THEN
 
-        insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
-        values (fnames, mnames, lnames, genders, phonenumbers, dateofb, adrees);
+        IF  (AvalableCustomerFname != fnames AND AvalableCustomerLname != lnames AND AvalableCustomerMname != mnames) THEN
+
+            insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
+             values (fnames, mnames, lnames, genders, phonenumbers, dateofb, adrees);
+
+        END IF;
+
+        SET BookPrices = (SELECT BookPrice FROM Books WHERE Title = BookName AND ISBN = isbns);
+
+        SET CurrentUserName = current_user;
+
+        SET EmpUserName = (SELECT ID FROM Accounts WHERE AUsernames = concat(TRIM(CurrentUserName)));
 
         set CustID = (select ID from Customers where Fname = fnames and Mname = mnames and Lname = lnames);
+        SET EmployeeIDs = (SELECT ID FROM Employees WHERE EuserAccountID = EmpUserName);
 
-        INSERT INTO BorrowedBooks (BookID, BorrowDate, ReturnDate, CustomerID)
-        VALUES (BookIDS, now(), null, CustID);
+        INSERT INTO BorrowedBooksCustomer (EmployeeID,BookID, BorrowDate, ReturnDate, CustomerID , BorrowPrice)
+        VALUES (EmployeeIDs,BookIDS, sysdate(), null, CustID , BorrowBookPrice(BookPrices));
 
         SET s = 'successfully ';
         select s;
@@ -83,6 +105,7 @@ BEGIN
     END IF;
 end $
 delimiter ;
+
 
 
 # to return a book if the returned date is not specified
