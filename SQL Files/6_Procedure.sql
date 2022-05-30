@@ -376,7 +376,7 @@ begin
     EXECUTE `stmt`;
     DEALLOCATE PREPARE `stmt`;
 
-    set IDUser = (SELECT ID FROM Accounts WHERE usernamee  = concat(`p_Name`, `_HOST`));
+    set IDUser = (SELECT ID FROM Accounts WHERE AUsernames  = concat(`p_Name`, `_HOST`));
 
     DELETE FROM Employees WHERE EuserAccountID = IDUser;
     DELETE FROM Accounts WHERE ID = IDUser;
@@ -407,7 +407,7 @@ begin
     EXECUTE `stmt`;
     DEALLOCATE PREPARE `stmt`;
 
-    set IDUser = (SELECT ID FROM Accounts WHERE usernamee  = concat(`p_Name`, `_HOST`));
+    set IDUser = (SELECT ID FROM Accounts WHERE AUsernames  = concat(`p_Name`, `_HOST`));
 
 
     DELETE FROM Members WHERE MuserAccountID = IDUser ;
