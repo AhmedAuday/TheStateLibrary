@@ -57,6 +57,27 @@ CREATE TABLE Customers(
 
 );
 
+
+CREATE TABLE Employees(
+    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+    Fname varchar(150) NOT NULL,
+    Mname varchar(150) NOT NULL,
+    Lname varchar(150) NOT NULL,
+    Gender enum('Male','Female') NOT NULL,
+    PhoneNumber bigint NOT NULL,
+    DateOfBirth date NOT NULL,
+    Position enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
+    EuserAccountID int NOT NULL unique,
+    Salary dec(6,2) not null ,
+
+  CONSTRAINT EmployeeUserAccount FOREIGN KEY (EuserAccountID)
+    REFERENCES Accounts(ID)
+    on update cascade
+    on delete cascade
+);
+
+
+
 CREATE TABLE BorrowedBooksCustomer(
      ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
      EmployeeID INT NOT NULL ,
@@ -96,25 +117,6 @@ CREATE TABLE CustomerBorrowReports(
 
     CONSTRAINT DamageReport FOREIGN KEY (BorrowedBookID)
     REFERENCES BorrowedBooksCustomer(ID)
-    on update cascade
-    on delete cascade
-);
-
-
-CREATE TABLE Employees(
-    ID int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
-    Fname varchar(150) NOT NULL,
-    Mname varchar(150) NOT NULL,
-    Lname varchar(150) NOT NULL,
-    Gender enum('Male','Female') NOT NULL,
-    PhoneNumber bigint NOT NULL,
-    DateOfBirth date NOT NULL,
-    Position enum ('librarians' , 'Library Technicians' ,'Library Directors' ,'Library Managers' , 'accounting'),
-    EuserAccountID int NOT NULL unique,
-    Salary dec(6,2) not null ,
-
-  CONSTRAINT EmployeeUserAccount FOREIGN KEY (EuserAccountID)
-    REFERENCES Accounts(ID)
     on update cascade
     on delete cascade
 );
@@ -167,7 +169,7 @@ CREATE TABLE BorrowedBooksMembers(
      ReturnDate DATETIME ,
      BorrowPrice DEC(5,2) NOT NULL ,
 
-    CONSTRAINT Booksss FOREIGN KEY (BookID)
+    CONSTRAINT Bookssa FOREIGN KEY (BookID)
     REFERENCES Books(ID)
     on update cascade
     on delete cascade,
@@ -177,7 +179,7 @@ CREATE TABLE BorrowedBooksMembers(
     on update cascade
     on delete cascade,
 
-    CONSTRAINT Invoice FOREIGN KEY (EmployeeID)
+    CONSTRAINT Invoicess FOREIGN KEY (EmployeeID)
     REFERENCES Employees(ID)
     on update cascade
     on delete cascade
@@ -192,7 +194,7 @@ CREATE TABLE MembersBorrowReports(
     Issues varchar(200) NOT NULL ,
     EstimatedDamageValue double(5,2) NOT NULL,
 
-    CONSTRAINT DamageReport FOREIGN KEY (BorrowedBooksMembersID)
+    CONSTRAINT DamageReportsd FOREIGN KEY (BorrowedBooksMembersID)
     REFERENCES BorrowedBooksMembers(ID)
     on update cascade
     on delete cascade
@@ -208,7 +210,7 @@ CREATE TABLE MembersReports(
     Fine DEC(5,2) NOT NULL,
     IssueDate DATETIME NOT NULL,
 
-    CONSTRAINT DamageReport FOREIGN KEY (MemberID)
+    CONSTRAINT DamageReports FOREIGN KEY (MemberID)
     REFERENCES Members(ID)
     on update cascade
     on delete cascade
