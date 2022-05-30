@@ -49,7 +49,7 @@ create VIEW  MembersData AS
            CONCAT(memberLevel(Price) , ' ',MT.Subscription,' ' ,MT.Price ) AS Subscriptions ,
            mm.MembershipStart, getMonths(mm.MembershipStart) AS MemberSince,
            if(mm.MembershipEnd = SYSDATE() ,'Expired' , 'Not Expired') As Status ,mm.MembershipEnd ,
-             MT.Price,A.AUsernames , password(A.APasswords) As Password
+             MT.Price,A.AUsernames , md5(A.APasswords)as Passwors
 from Members As mm
 inner join MembershipTypes MT on mm.MembershipTypeID = MT.ID
 inner join Accounts A on mm.MuserAccountID = A.ID
@@ -59,7 +59,7 @@ inner join MembersReports AS r1r on mm.ID = r1r.MemberID;
 # to view All employees with accounts
 create view Employeess As
     select concat_ws(' ' ,fname, mname, lname) AS EmployeeName, A.AUsernames ,A.ARoles,
-           PASSWORD(A.APasswords) As Password,
+           md5(A.APasswords) as Passwors,
            gender, phonenumber, dateofbirth, Position , Salary
     from Employees
 
