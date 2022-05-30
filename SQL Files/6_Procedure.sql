@@ -272,11 +272,11 @@ begin
     DEALLOCATE PREPARE `stmt`;
     FLUSH PRIVILEGES;
 
-    INSERT INTO Accounts (usernamee, Passwordd, Rolee)
+    INSERT INTO Accounts (AUsernames, APasswords, ARoles)
     VALUES (concat(`p_Name`, `_HOST`), `p_Passw`, 'Employee');
 
-    set UserAccount = (select ID FROM Accounts WHERE usernamee = concat(`p_Name`, `_HOST`));
-    insert into Employees(fname, mname, lname, gender, phonenumber, dateofbirth, EuserAccountID, Postion, Salary)
+    set UserAccount = (select ID FROM Accounts WHERE AUsernames = concat(`p_Name`, `_HOST`));
+    insert into Employees(fname, mname, lname, gender, phonenumber, dateofbirth, EuserAccountID, Position, Salary)
     values (fnames, mnames, lnames, genders, phoneNumbers, Birthdate, UserAccount, postin, sal);
 
     SET s = 'employee Registered Successfully';
