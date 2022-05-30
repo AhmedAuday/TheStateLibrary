@@ -31,9 +31,9 @@ End $$
 
 # if customer borrowed a book the qty on book table Well be less
 delimiter ah
-CREATE TRIGGER QuantityUpdate
+CREATE TRIGGER QuantityUpdateCustomer
 AFTER INSERT
-   ON BorrowedBooks FOR EACH ROW
+   ON BorrowedBooksCustomer FOR EACH ROW
 BEGIN
 UPDATE Books
 SET Books.Quantity = books.Quantity - 1
@@ -42,6 +42,18 @@ WHERE Books.ID = New.BookID;
 END; ah
     delimiter ;
 
+
+delimiter br
+CREATE TRIGGER QuantityUpdateMembers
+AFTER INSERT
+   ON BorrowedBooksMembers FOR EACH ROW
+BEGIN
+UPDATE Books
+SET Books.Quantity = books.Quantity - 1
+WHERE Books.ID = New.BookID;
+
+END; br
+    delimiter ;
 
 
 
