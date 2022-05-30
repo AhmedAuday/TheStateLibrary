@@ -67,5 +67,22 @@ BEGIN
 END $*
 DELIMITER ;
 
+DELIMITER $^
+CREATE FUNCTION BorrowBookPrice(
+	BookPrice DECIMAL(5,2)
+)
+RETURNS dec(5,2)
+DETERMINISTIC
+BEGIN
+    DECLARE BorrowPrice dec(5,2);
+
+   SET BorrowPrice = (BookPrice/2);
+
+	RETURN (BorrowPrice);
+END $^
+DELIMITER ;
+
+
+
 
 
