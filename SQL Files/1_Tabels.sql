@@ -1,6 +1,3 @@
-# done by Ahmed Auday Ahmed
-#this one first
-# then open Logs folder and run it all
 
 create database TheStateLibrary;
  USE TheStateLibrary;
