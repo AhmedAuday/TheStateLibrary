@@ -47,9 +47,12 @@ end $
 delimiter ;
 
 
+
+
+
 # to borrow a Book for customer
-DELIMITER $
-DROP procedure if exists CustBorrowBook$
+DELIMITER %
+DROP procedure if exists CustBorrowBook%
 create procedure CustBorrowBook(
     in fnames varchar(250), in mnames varchar(250),
     in lnames varchar(250), in genders varchar(20), in phonenumbers bigint, in dateofb date, in adrees varchar(250),
@@ -64,8 +67,7 @@ BEGIN
     DECLARE CustID int;
     DECLARE s varchar(50);
     DECLARE EmployeeIDs int;
-    DECLARE EmpUserName INT;
-    DECLARE CurrentUserName VARCHAR(250);
+    DECLARE AccountID VARCHAR(200);
     DECLARE BookPrices DEC(5,2);
 
 
@@ -78,24 +80,23 @@ BEGIN
 
     IF (availableBooks = BookName) THEN
 
-        IF  (AvalableCustomerFname != fnames AND AvalableCustomerLname != lnames AND AvalableCustomerMname != mnames) THEN
-
-            insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
-             values (fnames, mnames, lnames, genders, phonenumbers, dateofb, adrees);
-
-        END IF;
 
         SET BookPrices = (SELECT BookPrice FROM Books WHERE Title = BookName AND ISBN = isbns);
 
-        SET CurrentUserName = current_user;
-
-        SET EmpUserName = (SELECT ID FROM Accounts WHERE AUsernames = concat(TRIM(CurrentUserName)));
-
         set CustID = (select ID from Customers where Fname = fnames and Mname = mnames and Lname = lnames);
-        SET EmployeeIDs = (SELECT ID FROM Employees WHERE EuserAccountID = EmpUserName);
+
+
+
+
+        SET AccountID = (SELECT Accounts.ID from Accounts WHERE AUsernames = (SELECT concat(current_user)));
+
+        SET EmployeeIDs = (SELECT Employees.ID FROM Employees WHERE EuserAccountID = AccountID);
+
+       insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
+        values (fnames, mnames, lnames, genders, phonenumbers, dateofb, adrees);
 
         INSERT INTO BorrowedBooksCustomer (EmployeeID,BookID, BorrowDate, ReturnDate, CustomerID , BorrowPrice)
-        VALUES (EmployeeIDs,BookIDS, sysdate(), null, CustID , BorrowBookPrice(BookPrices));
+         VALUES ( EmployeeIDs,BookIDS, sysdate(), null, CustID , BorrowBookPrice(BookPrices));
 
         SET s = 'successfully ';
         select s;
@@ -103,8 +104,10 @@ BEGIN
     ELSE
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book Not Available';
     END IF;
-end $
+end %
 delimiter ;
+
+
 
 
 
@@ -147,6 +150,9 @@ end %%
 delimiter ;
 
 
+
+
+
 # to give a raise for an employees positions  by 15%
 delimiter $$$
 DROP procedure if exists GiveRaise$$$
@@ -160,6 +166,11 @@ begin
     select s;
 end $$$
 delimiter ;
+
+
+
+
+
 
 
 # add new member
@@ -232,6 +243,11 @@ begin
 end &$
 delimiter ;
 
+
+
+
+
+
 # add new Employee
 delimiter *!
 DROP procedure if exists newEmployee*!
@@ -246,7 +262,8 @@ begin
     DECLARE UserAccount int;
     declare sal dec(6, 2);
     DECLARE s varchar(255);
-
+    DECLARE UserNames VARCHAR(200);
+    DECLARE Hostss VARCHAR(200);
     if (postin = 'librarians') then
         set sal = 1500.0;
     elseif (postin = 'Library Directors') then
@@ -266,16 +283,20 @@ begin
     SET @`sql` := CONCAT('CREATE USER ', `p_Name`, `_HOST`, ' IDENTIFIED BY ', `p_Passw`);
     PREPARE `stmt` FROM @`sql`;
     EXECUTE `stmt`;
-    SET @`sql` := CONCAT('GRANT SELECT,INSERT ON TheStateLibrary.AuthorsBooks TO ', `p_Name`, `_HOST`);
+    SET @`sql` := CONCAT('GRANT ALL PRIVILEGES ON TheStateLibrary.* TO ', `p_Name`, `_HOST`);
     PREPARE `stmt` FROM @`sql`;
     EXECUTE `stmt`;
     DEALLOCATE PREPARE `stmt`;
     FLUSH PRIVILEGES;
 
-    INSERT INTO Accounts (AUsernames, APasswords, ARoles)
-    VALUES (concat(`p_Name`, `_HOST`), `p_Passw`, 'Employee');
+    set UserNames = replace(P_Name,'''','');
+    SET Hostss = replace(_Host,'''','');
 
-    set UserAccount = (select ID FROM Accounts WHERE AUsernames = concat(`p_Name`, `_HOST`));
+
+    INSERT INTO Accounts (AUsernames, APasswords, ARoles)
+    VALUES ( concat(UserNames,Hostss) ,md5(`p_Passw`) , 'Employee');
+
+    set UserAccount = (select ID FROM Accounts WHERE AUsernames = concat(UserNames,Hostss));
     insert into Employees(fname, mname, lname, gender, phonenumber, dateofbirth, EuserAccountID, Position, Salary)
     values (fnames, mnames, lnames, genders, phoneNumbers, Birthdate, UserAccount, postin, sal);
 
@@ -284,6 +305,10 @@ begin
 
 end *!
 delimiter ;
+
+
+
+
 
 # to Renew Membership
 delimiter %%

@@ -8,7 +8,7 @@ create database TheStateLibrary;
 CREATE TABLE Accounts(
     ID int AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary Key',
     AUsernames varchar(50) NOT NULL unique ,
-    APasswords varchar(20) NOT NULL ,
+    APasswords varchar(200) NOT NULL ,
     ARoles enum('Admin' , 'Employee' ,'Member') NOT NULL
 );
 

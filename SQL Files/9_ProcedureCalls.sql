@@ -4,7 +4,7 @@ START TRANSACTION ;
 
 savepoint BorrowBook;
 
-call  BorrowBook('Ahmed' ,'Mohammed' , 'Ahmed' , 'Male',
+call  CustBorrowBook('Ahmed' ,'Mohammed' , 'Ahmed' , 'Male',
     8392798479 , '2000-05-11','dream city 819',
     'The Runaway' , '8cd2ce7114');
 
@@ -29,7 +29,7 @@ call newMember('ali' , 'Yaqoob' , 'sadoon' , 'SS@@hjkl99' , 'Male' , 92093809283
 
 savepoint NewEmp;
 
-call newEmployee('ahmed' , 'hashim' , 'ridha' , 'SS@@hkl99' , 'Male' , 9209380928308 ,
+call newEmployee('ahmed' , 'hashim' , 'alik' , 'SS@@hkl99' , 'Male' , 9209380928308 ,
     '1997-12-01' , 'librarians');
 
 

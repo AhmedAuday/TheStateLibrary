@@ -1,12 +1,12 @@
 
 
 
-# creating a user for the backup to be accessed by this user
-CREATE USER 'ahmed'@'localhost'
-    IDENTIFIED WITH mysql_native_password BY 'AA@@aa1990';
-
-GRANT all privileges ON *.* TO 'ahmed'@'localhost';
-flush privileges ;
+-- # creating a user for the backup to be accessed by this user
+-- CREATE USER 'ahmed'@'localhost'
+--     IDENTIFIED WITH mysql_native_password BY 'AA@@aa1990';
+--
+-- GRANT all privileges ON *.* TO 'ahmed'@'localhost';
+-- flush privileges ;
 
 
 
