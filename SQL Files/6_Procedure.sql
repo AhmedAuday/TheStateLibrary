@@ -92,8 +92,11 @@ BEGIN
 
         SET EmployeeIDs = (SELECT Employees.ID FROM Employees WHERE EuserAccountID = AccountID);
 
-       insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
+        IF (fnames != AvalableCustomerFname AND mnames != AvalableCustomerMname AND lnames != lnames) then
+            insert into Customers (Fname, Mname, Lname, Gender, PhoneNumber, DateOfBirth, Addresses)
         values (fnames, mnames, lnames, genders, phonenumbers, dateofb, adrees);
+        END IF;
+
 
         INSERT INTO BorrowedBooksCustomer (EmployeeID,BookID, BorrowDate, ReturnDate, CustomerID , BorrowPrice)
          VALUES ( EmployeeIDs,BookIDS, sysdate(), null, CustID , BorrowBookPrice(BookPrices));
