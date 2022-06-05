@@ -55,6 +55,35 @@ WHERE Books.ID = New.BookID;
 END; br
     delimiter ;
 
+# TODO CHEAK IF WORKS
+
+# to add the book after returned
+delimiter br
+CREATE TRIGGER QuantityUpdateReturn
+AFTER UPDATE
+   ON BorrowedBooksMembers FOR EACH ROW
+BEGIN
+UPDATE Books
+SET Books.Quantity = books.Quantity + 1
+WHERE Books.ID = New.BookID;
+
+END; br
+    delimiter ;
+
+
+# to add the book after return customer
+delimiter br
+CREATE TRIGGER QuantityUpdateReturn
+AFTER UPDATE
+   ON BorrowedBooksCustomer FOR EACH ROW
+BEGIN
+UPDATE Books
+SET Books.Quantity = books.Quantity + 1
+WHERE Books.ID = New.BookID;
+
+END; br
+    delimiter ;
+
 
 
 
