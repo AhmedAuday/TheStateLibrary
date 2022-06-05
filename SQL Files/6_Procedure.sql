@@ -173,14 +173,49 @@ delimiter ;
 
 
 
+# to return a book if the returned date is not specified Members
+DELIMITER %%
+DROP procedure if exists ReturnBookMembers%%
+create procedure ReturnBookMembers(in IDCardss CHAR(20), in bookIsbn char(10), in isDamages tinyint, issue varchar(100))
+BEGIN
+    DECLARE membersIDS int;
+    DECLARE availablebooks char(10);
+    DECLARE BoorowBOOksIDS int;
+    DECLARE Fee dec(5, 2);
+    DECLARE s varchar(50);
+
+    SET availablebooks = (select ISBN FROM Books where ISBN = bookIsbn);
+    SET membersIDS = (select ID from Members where IDCard = IDCardss);
+
+    IF (availablebooks = bookIsbn) THEN
+
+        UPDATE BorrowedBooksMembers t SET t.ReturnDate = date_add(now(), INTERVAL 5 minute) WHERE t.MemberID = membersIDS;
+
+        if (isDamages = 1) then
+            set BoorowBOOksIDS = (select ID from BorrowedBooksMembers t WHERE t.MemberID = membersIDS);
+
+            set Fee = (select BookPrice from Books where ISBN = bookIsbn);
+
+            insert into MembersBorrowReports (IsDamage, DamageDate, Issues, EstimatedDamageValue, BorrowedBooksMembersID)
+            values (1, curdate(), issue, feeCharge(Fee), BoorowBOOksIDS);
+        end if;
+
+        SET s = 'book Returned successfully ';
+            select s;
+
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book Not Available';
+
+    END IF;
+end %%
+delimiter ;
 
 
 
 
 
 
-
-# to return a book if the returned date is not specified
+# to return a book if the returned date is not specified Customer
 DELIMITER %%
 DROP procedure if exists ReturnBook%%
 create procedure ReturnBook(in fnames varchar(250), in mnames varchar(250), in lnames varchar(250),
