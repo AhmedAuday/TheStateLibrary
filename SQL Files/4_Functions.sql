@@ -69,7 +69,7 @@ DELIMITER ;
 
 
 
-# setting borrow price
+# setting borrow price for customers
 DELIMITER $^
 CREATE FUNCTION BorrowBookPrice(
 	BookPrice DECIMAL(5,2)
@@ -87,5 +87,18 @@ DELIMITER ;
 
 
 
+# borrowPrice members
+DELIMITER $^
+CREATE FUNCTION BorrowBookPriceMembers(
+	BookPrice DECIMAL(5,2)
+)
+RETURNS dec(5,2)
+DETERMINISTIC
+BEGIN
+    DECLARE BorrowPrice dec(5,2);
 
+   SET BorrowPrice = (BookPrice/2);
 
+	RETURN (BorrowPrice);
+END $^
+DELIMITER ;
