@@ -212,7 +212,7 @@ begin
     FLUSH PRIVILEGES;
 
     INSERT INTO Accounts (AUsernames, APasswords, ARoles)
-    VALUES (concat(`p_Name`, `_HOST`), `p_Passw`, 'Member');
+    VALUES (concat(`p_Name`, `_HOST`),md5(`p_Passw`), 'Member');
 
     set UserAccount = (select ID FROM Accounts WHERE AUsernames = concat(`p_Name`, `_HOST`));
 
