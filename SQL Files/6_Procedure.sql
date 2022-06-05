@@ -114,6 +114,72 @@ delimiter ;
 
 
 
+
+
+
+# to borrow a Book for members
+DELIMITER %
+DROP procedure if exists MemberBorrowBook%
+create procedure MemberBorrowBook( IN IDCardss CHAR(20), in BookName varchar(250), isbns char(10))
+
+BEGIN
+    DECLARE BookIDS int;
+    DECLARE availableBooks varchar(250);
+    DECLARE AvalableMemberIDCard VARCHAR(150);
+
+    DECLARE MemberIDs int;
+    DECLARE s varchar(50);
+    DECLARE EmployeeIDs int;
+    DECLARE AccountID VARCHAR(200);
+    DECLARE BookPrices DEC(5,2);
+
+
+    SET AvalableMemberIDCard = (SELECT IDCard FROM Members WHERE IDCard=IDCardss);
+    SET availableBooks = (select Title FROM Books where Title = BookName);
+    set BookIDS = (select Books.ID from Books where Title = BookName AND ISBN = isbns);
+
+
+    IF (AvalableMemberIDCard = IDCardss) then
+        SELECT id, idcard, fname, mname, lname, gender, phonenumber, age, address, studyline, membershipstart, membershipend FROM Members WHERE IDCard = IDCardss;
+
+      IF (availableBooks = BookName) THEN
+
+
+        SET BookPrices = (SELECT BookPrice FROM Books WHERE Title = BookName AND ISBN = isbns);
+
+        set MemberIDs = (select ID from Members where IDCard = IDCardss);
+
+
+        SET AccountID = (SELECT Accounts.ID from Accounts WHERE AUsernames = (SELECT concat(current_user)));
+
+        SET EmployeeIDs = (SELECT Employees.ID FROM Employees WHERE EuserAccountID = AccountID);
+
+
+        INSERT INTO BorrowedBooksMembers (EmployeeID,BookID, BorrowDate, ReturnDate, MemberID , BorrowPrice)
+         VALUES ( EmployeeIDs,BookIDS, sysdate(), null, MemberIDs , BorrowBookPriceMembers(BookPrices));
+
+        SET s = 'successfully ';
+        select s;
+
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book Not Available';
+    END IF;
+    end if;
+end %
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
+
+
 # to return a book if the returned date is not specified
 DELIMITER %%
 DROP procedure if exists ReturnBook%%
