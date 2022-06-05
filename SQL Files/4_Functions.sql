@@ -102,3 +102,21 @@ BEGIN
 	RETURN (BorrowPrice);
 END $^
 DELIMITER ;
+
+
+
+# fee pricew if damage
+DELIMITER $^
+CREATE FUNCTION feeCharge(
+	BookPrice DECIMAL(5,2)
+)
+RETURNS dec(5,2)
+DETERMINISTIC
+BEGIN
+    DECLARE feePrice dec(5,2);
+
+   SET feePrice = ( (BookPrice/3) + 2 );
+
+	RETURN (feePrice);
+END $^
+DELIMITER ;
