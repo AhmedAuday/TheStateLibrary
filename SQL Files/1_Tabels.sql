@@ -110,7 +110,7 @@ CREATE TABLE CustomerBorrowReports(
     IsDamage bool NOT NULL,
     DamageDate date NOT NULL ,
     Issues varchar(200) NOT NULL ,
-    EstimatedDamageValue dec(5,2) NOT NULL,
+    fee dec(5,2) NOT NULL,
 
     CONSTRAINT DamageReport FOREIGN KEY (BorrowedBookID)
     REFERENCES BorrowedBooksCustomer(ID)
@@ -189,7 +189,7 @@ CREATE TABLE MembersBorrowReports(
     IsDamage bool NOT NULL,
     DamageDate date NOT NULL ,
     Issues varchar(200) NOT NULL ,
-    EstimatedDamageValue double(5,2) NOT NULL,
+    fee dec(5,2) NOT NULL,
 
     CONSTRAINT DamageReported FOREIGN KEY (BorrowedBooksMembersID)
     REFERENCES BorrowedBooksMembers(ID)
@@ -213,7 +213,7 @@ CREATE TABLE MembersReports(
     on delete cascade
 );
 
-
+# TODO CHECK THESE
 create table BooksDiscount(
     ID int auto_increment primary key comment 'Primary Key',
     bookID int not null unique ,
