@@ -67,6 +67,9 @@ BEGIN
 END $*
 DELIMITER ;
 
+
+
+# setting borrow price
 DELIMITER $^
 CREATE FUNCTION BorrowBookPrice(
 	BookPrice DECIMAL(5,2)
