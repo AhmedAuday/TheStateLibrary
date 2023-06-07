@@ -6,6 +6,7 @@
     <content url="file://$MODULE_DIR$/../CareHour_Dtatbse" />
     <content url="file://$MODULE_DIR$/../CareHour_database" />
     <content url="file://$MODULE_DIR$" />
+    <content url="file://$USER_HOME$/Sites/database" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

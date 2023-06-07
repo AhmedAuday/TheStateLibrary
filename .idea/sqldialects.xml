@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/../CareHour_database/careHour.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/10_BackUp.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/1_Tabels.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/3_Inserts.sql" dialect="MySQL" />
@@ -10,5 +11,6 @@
     <file url="file://$PROJECT_DIR$/SQL Files/7_Triggers.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/8_ Queries&amp;Sub.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/SQL Files/9_ProcedureCalls.sql" dialect="MySQL" />
+    <file url="file://$USER_HOME$/Sites/database/table.sql" dialect="MySQL" />
   </component>
 </project>
